@@ -13,13 +13,11 @@ CHAR_FOR_COMPLEX = NUM+UPPER+LOWER+SPECIAL_CHAR
 
 
 def generate_password(level, length)
-    if level == 1
-        "Genreated password: #{CHAR_FOR_PLAIN.sort_by { rand }.join[0...length]}"
-    elsif level == 2
-        "Genreated password: #{CHAR_FOR_COMPLEX.sort_by { rand }.join[0...length]}"
-    else
-        "Invalid level"
-    end
+    return 'Invalid level' unless (1..2).include?(level)
+    pwd = Class.const_get(level == 1 ? :CHAR_FOR_PLAIN : :CHAR_FOR_COMPLEX)
+                         .sort_by {rand}
+                         .join[0...length]
+    "Generated password: #{pwd}"
 end
 
 print "Press 1 for simple password\nPress 2 for complex password\n>"
@@ -28,8 +26,6 @@ level = gets.to_i
 print "Enter length of your password: "
 length = gets.to_i
 
-if  length < 8 
-    puts "Please enter length >= 8"
-else
-    puts generate_password(level, length)
-end
+abort "Please enter length >= 8" if length < 8 
+
+puts generate_password(level, length)
