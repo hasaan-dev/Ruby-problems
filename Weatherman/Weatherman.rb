@@ -37,19 +37,19 @@ class Weatherman
     data = Weatherman.extract_data_for_year(year, path)
 
     highest_temp_day = Weatherman.get_highest_temp_day(data)
-    month_day = highest_temp_day[0].split('-')
+    month_day = highest_temp_day.first.split('-')
     month = MON_TO_MONTH[month_day[1]]
     day = month_day[2]
     puts "Highest: #{highest_temp_day[1]}C on #{month} #{day}"
 
     lowest_temp_day = Weatherman.get_lowest_temp_day(data)
-    month_day = lowest_temp_day[0].split('-')
+    month_day = lowest_temp_day.first.split('-')
     month = MON_TO_MONTH[month_day[1]]
     day = month_day[2]
     puts "Lowest: #{lowest_temp_day[1]}C on #{month} #{day}"
 
     most_humid_day = Weatherman.get_highest_humidy_day(data)
-    month_day = most_humid_day[0].split('-')
+    month_day = most_humid_day.first.split('-')
     month = MON_TO_MONTH[month_day[1]]
     day = month_day[2]
     puts "Humid: #{most_humid_day[1]}% on #{month} #{day}"
@@ -75,11 +75,11 @@ class Weatherman
     data = Weatherman.extract_data_for_bar_chart(year_month, path)
     month = year_month.split('/')[1]
     month = MON_TO_MONTH[month.to_sym]
-    year = year_month.split('/')[0]
+    year = year_month.split('/').first
     data.each do |k, v|
       day = k.split('-')[2]
-      puts "#{day} #{'+'.red * v[0].to_i} #{v[0]}C"
-      puts "#{day} #{'-'.blue * v[1].to_i} #{v[1]}C"
+      puts "#{day} #{'+'.red * v.first.to_i.abs} #{v.first}C"
+      puts "#{day} #{'-'.blue * v.last.to_i.abs} #{v[1]}C"
     end
   rescue Exception => e
     abort e.message
@@ -89,10 +89,10 @@ class Weatherman
     data = Weatherman.extract_data_for_bar_chart(year_month, path)
     month = year_month.split('/')[1]
     month = MON_TO_MONTH[month]
-    year = year_month.split('/')[0]
+    year = year_month.split('/').first
     data.each do |k, v|
       day = k.split('-')[2]
-      puts "#{day} #{'+'.blue * v[1].to_i}#{'+'.red * v[0].to_i} #{v[1]}C-#{v[0]}C"
+      puts "#{day} #{'+'.blue * v.last.to_i.abs}#{'+'.red * v.first.to_i.abs} #{v.last}C-#{v.first}C"
     end
   rescue Exception => e
     abort e.message
